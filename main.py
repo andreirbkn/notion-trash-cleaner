@@ -44,7 +44,7 @@ def throw_out(client, blocks):
         try:
             show_name(client, block)
             client.post("deleteBlocks", {"blockIds": [block['id']], "permanentlyDelete": True})
-            show_name(client, block)
+            print("Deleted.")
         except Exception as e:
           print('Something in "throw_out" goes wrong ' + str(e))
 
