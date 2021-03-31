@@ -1,3 +1,4 @@
+
 from notion.client import NotionClient
 
 def get_trash(client, q):
@@ -22,25 +23,30 @@ def get_trash(client, q):
     }
     try:
         results = client.post('search', query)
-    except:
-        print("Something goes wrong")
+    except Exception as e:
+        print('Something in "get_trash" goes wrong ' + str(e))
 
     blocks = results.json()['results']
     return blocks
 
-def show_names(client, blocks_ids):
-    for block_id in blocks:
-            id = block_id['id']
-            page = client.get_block(id)
-            print(page.title)
+def show_name(client, block):
+    id = block['id']
+    try:
+        page = client.get_block(id)
+    except Exception as e:
+        print('Something in "show_name" goes wrong ' + str(e))
+
+    print('not found' if page is None else page.title)
+    
         
 def throw_out(client, blocks):
      for block in blocks:
         try:
+            show_name(client, block)
             client.post("deleteBlocks", {"blockIds": [block['id']], "permanentlyDelete": True})
-            print(block['id'])
-        except:
-          print("Something goes wrong")
+            show_name(client, block)
+        except Exception as e:
+          print('Something in "throw_out" goes wrong ' + str(e))
 
 if __name__== "__main__":
 
